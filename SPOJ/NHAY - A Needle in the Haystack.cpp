@@ -50,6 +50,8 @@ Warning: large Input/Output data, be careful with certain languages */
 #include <iterator>
 #include <string>
 
+
+// Just a simple window technique
 int main()
 {
     std::ios_base::sync_with_stdio(false);
@@ -71,7 +73,8 @@ int main()
             
             std::cout << std::distance(std::begin(haystack), it2) << std::endl;
                         
-            it = std::next(it2);
+            it = it2;
+            std::advance(it, needle.size());
         }
         
         std::cout << std::endl;
