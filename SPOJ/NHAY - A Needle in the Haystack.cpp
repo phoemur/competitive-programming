@@ -73,8 +73,7 @@ int main()
             
             std::cout << std::distance(std::begin(haystack), it2) << std::endl;
                         
-            it = it2;
-            std::advance(it, needle.size());
+            it = std::next(it2);
         }
         
         std::cout << std::endl;
