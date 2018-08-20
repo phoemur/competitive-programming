@@ -42,7 +42,7 @@ void countingSort(ForwardIterator first,
                   int Beg, 
                   int End)
 {    
-    assert(End - Beg >= 0);
+    assert(End - Beg > 0);
     
     std::vector<int> counts (End - Beg + 1, 0);
 
@@ -52,7 +52,7 @@ void countingSort(ForwardIterator first,
     }
 
     // Store in sorted order
-    for (int i=0; i < counts.size(); ++i) {
+    for (std::size_t i=0; i < counts.size(); ++i) {
         first = std::fill_n(first, counts[i], i + Beg);
     }
 }
