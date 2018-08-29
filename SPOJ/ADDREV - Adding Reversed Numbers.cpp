@@ -57,7 +57,7 @@ int main()
         
         int c = std::stoi(x) + std::stoi(y);
         
-        std::cout << std::stoi(reverse_number(c)) << std::endl;
+        std::cout << reverse_number(c) << std::endl;
     }
     
     return 0;

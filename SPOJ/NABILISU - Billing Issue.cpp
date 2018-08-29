@@ -65,7 +65,6 @@ int main()
             std::cout << "Case " << i << ": YES\n";
         else
             std::cout << "Case " << i << ": NO\n";
-
     }
     
     return 0;
