@@ -62,10 +62,8 @@ int main()
     
     std::string input;
     
-    for (int test = 1; std::getline(std::cin, input); ++test)
+    for (int test = 1; std::getline(std::cin, input) && input[0] != '-'; ++test)
     {
-        if (input[0] == '-') break;
-        
         std::cout << test << ". " << solve(input) << "\n";
     }
     
