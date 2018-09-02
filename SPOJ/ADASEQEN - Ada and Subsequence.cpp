@@ -93,8 +93,10 @@ int solve_bottom_up(const std::string& first,
     
     std::vector<std::vector<int>> dp (fst_sz+1, std::vector<int>(snd_sz+1));
     
-    for (int i=0; i<=fst_sz; ++i) {
-        for (int j=0; j<=snd_sz; ++j) {
+    for (int i=0; i<=fst_sz; ++i) 
+    {
+        for (int j=0; j<=snd_sz; ++j) 
+        {
             if (i == 0 || j == 0)
                 dp[i][j] = 0;
             
@@ -118,7 +120,7 @@ int main()
     std::cin >> n >> m;
     
     std::map<char,int> cost;
-    for (char s = 26, c = 'a'; s--; c++) {std::cin >> cost[c];}
+    for (char c = 'a'; c <= 'z'; ++c) {std::cin >> cost[c];}
     
     std::string first, second;
     std::cin >> first >> second;
