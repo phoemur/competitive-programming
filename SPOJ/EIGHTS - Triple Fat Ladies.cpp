@@ -23,20 +23,18 @@ Output:
 
 */
 
+#include <algorithm>
 #include <iostream>
+#include <iterator>
 
 int main()
-{
-    int tests;
-    std::cin >> tests;
-    
-    while (tests--)
-    {
-        long long num;
-        std::cin >> num;
-        
-        std::cout << 192+(num-1)*250 << std::endl;
-    }
+{    
+    std::transform(std::next(std::istream_iterator<long long>(std::cin)), 
+                   std::istream_iterator<long long>{}, 
+                   std::ostream_iterator<long long>(std::cout, "\n"), 
+                   [](auto num) {
+                       return 192 + (num - 1) * 250;
+                   });
     
     return 0;
 }
