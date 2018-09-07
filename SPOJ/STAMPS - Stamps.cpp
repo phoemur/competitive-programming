@@ -69,3 +69,43 @@ int main()
     
     return 0;
 }
+
+/* 2nd version - worse big-O complexity
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <vector>
+
+int main()
+{
+    int scen;
+    std::cin >> scen;
+    
+    for (int i = 1; i <= scen; ++i)
+    {
+        int n, t;
+        std::cin >> n >> t;
+        
+        // Input stamps and sort
+        std::vector<long> stamps (t);
+        std::copy_n(std::istream_iterator<long>(std::cin), t, std::begin(stamps));
+        std::sort(stamps.rbegin(), stamps.rend());
+        
+        // Build preffix sum
+        std::vector<long> preffix_sum (t);
+        std::partial_sum(std::begin(stamps), std::end(stamps), std::begin(preffix_sum));
+        
+        // Binary search
+        auto it = std::lower_bound(std::begin(preffix_sum), std::end(preffix_sum), n);
+        
+        if (it != std::end(preffix_sum))
+            std::cout << "Scenario #" << i << ":\n" << std::distance(std::begin(preffix_sum), it) + 1 << "\n\n";
+        else
+            std::cout << "Scenario #" << i << ":\nimpossible\n\n";
+        
+    }
+    
+    return 0;
+}
+*/
