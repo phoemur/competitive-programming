@@ -48,12 +48,9 @@ int main()
         
         int res = 0;
         
-        for (auto it = std::begin(friends); it != std::end(friends); std::advance(it, 1))
-        {
-            if (*it == price - *it) 
-                --res;
-            
-            if (std::binary_search(it, std::end(friends), price - *it))
+        for (auto it = std::begin(friends); it != std::prev(std::end(friends)); std::advance(it, 1))
+        {            
+            if (std::binary_search(std::next(it), std::end(friends), price - *it))
                 ++res;
         }
         
