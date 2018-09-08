@@ -58,27 +58,20 @@ long solve(const std::vector<std::pair<int,int>>& minmax_pres, int presents)
 {
     const int sz = minmax_pres.size();
     
-    std::vector<std::vector<long>> dp (sz + 1, std::vector<long>(presents + 1));
+    std::vector<std::vector<long>> dp (sz + 1, std::vector<long>(presents + 1, 0));
     
     // Fill table according to recurrence relation expressed above
-    for (int i = 0; i <= sz; ++i)
+    dp[0][0] = 1; // base case
+    for (int i = 1; i <= sz; ++i)
     {
         for (int j = 0; j <= presents; ++j)
         {
-            if (i == 0)
-            {
-                if (j == 0) dp[i][j] = 1;
-                else dp[i][j] = 0;
-            }
-            else
-            {
-                long res = 0;
-                for (int k = minmax_pres[i-1].first; k <= minmax_pres[i-1].second; ++k)
-                    if (k <= j)
-                        res += dp[i-1][j-k];
+            long res = 0;
+            for (int k = minmax_pres[i-1].first; k <= minmax_pres[i-1].second; ++k)
+                if (k <= j)
+                    res += dp[i-1][j-k];
                     
-                dp[i][j] = res;
-            }
+            dp[i][j] = res;
         }
     }
     
