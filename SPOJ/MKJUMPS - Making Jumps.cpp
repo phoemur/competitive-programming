@@ -47,6 +47,7 @@ Case 3, 0 squares can not be reached.
 
 #include <algorithm>
 #include <array>
+#include <exception>
 #include <iostream>
 #include <limits>
 #include <utility>
@@ -73,7 +74,7 @@ inline std::pair<int,int> getStartPos(const std::vector<std::vector<char>>& boar
             if (board[i][j] == ' ')
                 return std::make_pair(i, j);
             
-    return std::make_pair(-1, -1);
+    throw std::logic_error("No starting place available");
 }
 
 // Count number of unvisited cells 
