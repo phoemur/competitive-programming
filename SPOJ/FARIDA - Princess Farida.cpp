@@ -63,21 +63,13 @@ inline long solve_bottomup(const std::vector<long>& monsters)
 // Dynamic programming bottom-up approach optimized for O(1) memory
 inline long solve(const std::vector<long>& monsters)
 {
-    const int sz = monsters.size();
-    if (sz == 0) return 0;
-    else if (sz == 1) return monsters[0];
+    long m1 = 0, m2 = 0;
     
-    // Base cases
-    long m1 = monsters[0];
-    long m2 = std::max(m1, monsters[1]);
-    
-    // Fill
-    long tmp;
-    for (int i = 2; i < sz; ++i)
+    for (auto& amount: monsters)
     {
-        tmp = std::max(monsters[i] + m1, m2);
+        long take = amount + m1;
         m1 = m2;
-        m2 = tmp;
+        m2 = std::max(m1, take);
     }
     
     return m2;
