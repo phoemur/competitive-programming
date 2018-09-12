@@ -73,7 +73,7 @@ int main()
     {
         int source, dest;
         std::cin >> source >> dest;
-        graph[source-1].push_back(dest-1); 
+        graph[source-1].push_back(dest-1);
     }
 
     if (solve(graph))
