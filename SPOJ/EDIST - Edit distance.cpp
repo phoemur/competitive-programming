@@ -82,6 +82,34 @@ int solve(const std::string& str1, const std::string& str2)
     return dp[sz1][sz2];
 }
 
+// Dynamic programming bottom-up approach optimized for less memory use
+int solve_optimized(const std::string& str1, const std::string& str2)
+{
+    const int sz1 = str1.size(), sz2 = str2.size();
+    
+    std::vector<std::vector<int>> dp (2, std::vector<int>(sz2+1));
+    
+    // Fill table according to recurrence relation expressed above
+    for (int i = 0; i <= sz1; ++i)
+    {
+        for (int j = 0; j <= sz2; ++j)
+        {
+            if (i == 0)
+                dp[1][j] = j;
+            else if (j == 0)
+                dp[1][j] = i;
+            else if (str1[i-1] == str2[j-1])
+                dp[1][j] = dp[0][j-1];
+            else
+                dp[1][j] = 1 + std::min(dp[1][j-1], std::min(dp[0][j], dp[0][j-1]));
+        }
+        
+        std::iter_swap(&dp[0], &dp[1]);
+    }
+    
+    return dp[0][sz2];
+}
+
 
 int main()
 {
@@ -94,7 +122,8 @@ int main()
         std::cin >> a >> b;
         
         //std::cout << solve_recursive(a, a.size(), b, b.size()) << std::endl;
-        std::cout << solve(a, b) << std::endl;
+        //std::cout << solve(a, b) << std::endl;
+        std::cout << solve_optimized(a, b) << std::endl;
     }
     
     
