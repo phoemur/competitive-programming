@@ -81,7 +81,7 @@ std::int64_t dijkstra(const std::vector<std::vector<std::pair<int,int>>>& graph,
     auto comp = [&distances](int a, int b){return distances[a] >= distances[b];};
     std::priority_queue<int, std::vector<int>, decltype(comp)> pq (comp);
     
-    // Setting distance to source to zero
+    // Set distance to source
     distances[source] = 0;
     pq.push(source);
     
@@ -97,7 +97,7 @@ std::int64_t dijkstra(const std::vector<std::vector<std::pair<int,int>>>& graph,
             {
                 if (distances[vertex] + edge.second < distances[edge.first])
                 {
-                    // We have discovered a new shortest route
+                    // We have discovered a new shortest route, update
                     distances[edge.first] = distances[vertex] + edge.second;
                     pq.push(edge.first);
                 }
@@ -141,7 +141,7 @@ int main()
             {
                 int dest, cost;
                 std::cin >> dest >> cost;
-                graph[i].emplace_back(dest-1, cost);
+                graph[i].emplace_back(dest - 1, cost);
             }
         }
         
