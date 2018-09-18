@@ -102,15 +102,10 @@ void solve(const std::vector<Party>& vec, int max_budget)
     int max_fun = dp[sz][max_budget];
     
     // Find total cost
-    int spent = 0;
-    for (int i = 0; i <= max_budget; ++i)
-    {
-        if (dp[sz][i] == max_fun)
-        {
-            spent = i;
-            break;
-        }
-    }
+    int spent = std::distance(std::begin(dp[sz]), 
+                              std::lower_bound(std::begin(dp[sz]), 
+                                               std::end(dp[sz]), 
+                                               max_fun));
         
     // Print
     std::cout << spent << " " << max_fun << std::endl;
