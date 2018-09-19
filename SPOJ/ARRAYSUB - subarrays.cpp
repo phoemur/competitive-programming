@@ -29,6 +29,7 @@ Output:
 */
 
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <iterator>
 #include <limits>
@@ -44,7 +45,7 @@ void solve_bruteforce(const std::vector<int>& vec, int k)
 }
 
 // Solve using segment Tree
-void solve(const std::vector<int>& vec, int k)
+void solve_segtree(const std::vector<int>& vec, int k)
 {
     const int n = vec.size();
     
@@ -77,6 +78,49 @@ void solve(const std::vector<int>& vec, int k)
         std::cout << query(i, i+k) << " ";
 }
 
+// Solve using Sparse Table Algorithm
+void solve_sparsetable(const std::vector<int>& vec, int k)
+{
+    const int n = vec.size();
+    
+    // Preprocess
+    std::vector<std::vector<int>> lookup (n);
+    
+    // Initialize M for the intervals with length 1
+    for (int i = 0; i < n; i++)
+        lookup[i].push_back(i);
+        // lookup[i][0] = i
+    
+    // Compute values from smaller to bigger intervals
+    for (int j=1; (1<<j)<=n; j++)
+    {
+        // Compute maximum value for all intervals with size 2^j
+        for (int i=0; (i+(1<<j)-1) < n; i++)
+        { 
+            // For vec[2][10], we compare vec[lookup[0][3]] and
+            // vec[lookup[3][3]]
+            if (vec[lookup[i][j-1]] > vec[lookup[i + (1<<(j-1))][j-1]])
+                // lookup[i][j] = lookup[i][j-1]
+                lookup[i].push_back(lookup[i][j-1]);
+            else
+                // lookup[i][j] = lookup[i + (1 << (j-1))][j-1];
+                lookup[i].push_back(lookup[i + (1 << (j-1))][j-1]);      
+        }
+    }
+       
+    // Print queries
+    for (int i = 0; i < n - k + 1; ++i)
+    {
+        //int L = i, R = i + k;
+        int j = static_cast<int>(std::log2(k));
+        
+        if (vec[lookup[i][j]] > vec[lookup[i + k - (1<<j)][j]])
+            std::cout << vec[lookup[i][j]] << " ";
+        else 
+            std::cout << vec[lookup[i + k - (1<<j)][j]] << " ";
+    }
+}
+
 int main()
 {
     std::ios_base::sync_with_stdio(false);
@@ -93,7 +137,8 @@ int main()
     std::cin >> k;
     
     // solve_bruteforce(vec, k);
-    solve(vec, k);
+    // solve_sparsetable(vec, k);
+    solve_segtree(vec, k);
         
     return 0;
 }
