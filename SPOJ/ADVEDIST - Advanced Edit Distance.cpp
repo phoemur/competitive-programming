@@ -44,19 +44,6 @@ Output:
 #include <string>
 #include <vector>
 
-// Minimum variadic template functions
-template<typename T>
-T minimum(T t1, T t2)
-{
-    return std::min(t1, t2);
-}
-
-template<typename T, typename... Args>
-T minimum(T t1, T t2, Args... args)
-{
-    return minimum(minimum(t1, t2), args...);
-}
-
 // Dynamic programming bottom-up approach
 // https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance
 int solve(const std::string& str1, const std::string& str2)
@@ -98,10 +85,10 @@ int solve(const std::string& str1, const std::string& str2)
             if(d == 0)
                 db = j;
                                
-            dp[i+1][j+1] = minimum(dp[i][j]+d, 
-                                   dp[i+1][j]+1, 
-                                   dp[i][j+1]+1, 
-                                   dp[i1][j1]+(i-i1-1)+1+(j-j1-1));
+            dp[i+1][j+1] = std::min({dp[i][j]+d, 
+                                     dp[i+1][j]+1, 
+                                     dp[i][j+1]+1, 
+                                     dp[i1][j1]+(i-i1-1)+1+(j-j1-1)});
         }
                        
         da[str1[i-1]] = i;
