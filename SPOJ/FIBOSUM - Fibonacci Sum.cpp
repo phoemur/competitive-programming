@@ -40,13 +40,13 @@ Constraints
 #include <utility>
 
 
-using matrix = std::array<std::array<std::uint64_t, 2>, 2>;
+using matrix2 = std::array<std::array<std::uint64_t, 2>, 2>;
 
 constexpr static int MOD = 1000000007;
 
-void mul(matrix& a, const matrix& b)
+void mul(matrix2& a, const matrix2& b)
 {
-    matrix res = {{{0,0}, {0,0}}};
+    matrix2 res = {{{0,0}, {0,0}}};
     
     for(int i = 0 ; i < 2 ; i ++)
         for(int j = 0 ; j < 2 ; j++)
@@ -58,8 +58,8 @@ void mul(matrix& a, const matrix& b)
 
 std::uint64_t fib(std::uint64_t  n)
 {
-    matrix mat  = {{{1 , 1} , {1 , 0}}};
-    matrix temp = {{{1 , 0} , {0 , 1}}};
+    matrix2 mat  = {{{1 , 1} , {1 , 0}}};
+    matrix2 temp = {{{1 , 0} , {0 , 1}}};
 
     while(n)
     {
