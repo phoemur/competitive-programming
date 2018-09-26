@@ -39,6 +39,7 @@ YES
 
 #include <algorithm>
 #include <array>
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -58,12 +59,12 @@ public:
         
     void insert(const std::string& str)
     {
-        insert(head, str);
+        insert_h(head, str);
     }    
         
     bool consistent() const noexcept
     {
-        return consistent(head);
+        return consistent_h(head);
     }
 
 private:
@@ -74,7 +75,7 @@ private:
     }
     
     // Recursive function to insert a string in Trie.
-    void insert(std::unique_ptr<Node>& head, 
+    void insert_h(std::unique_ptr<Node>& head, 
                 const std::string& str,
                 std::size_t index = 0)
     {
@@ -87,11 +88,11 @@ private:
             if (head->children.at(str[index] - '0') == nullptr) {
                 head->children[str[index] - '0'] = getNewTrieNode();
             }
-            insert(head->children[str[index] - '0'], str, index+1);
+            insert_h(head->children[str[index] - '0'], str, index+1);
         }
     }
     
-    bool haveChildren(const std::unique_ptr<Node>& curr) const noexcept
+    static bool haveChildren(const std::unique_ptr<Node>& curr) noexcept
     {
         return std::any_of(std::begin(curr->children), 
                            std::end(curr->children), 
@@ -101,20 +102,19 @@ private:
                            });
     }
     
-    bool consistent(const std::unique_ptr<Node>& curr) const noexcept
+    static bool consistent_h(const std::unique_ptr<Node>& curr) noexcept
     {
+        // Base cases
         if (curr == nullptr) 
             return true;
         else if (curr->isLeaf && haveChildren(curr)) 
             return false;
         else
-        {
-            for (const auto& node: curr->children)
-                if (node != nullptr)
-                    if (!consistent(node))
-                        return false;
-                    
-            return true;
+        {           
+            // Recurr
+            return std::all_of(std::begin(curr->children), 
+                               std::end(curr->children), 
+                               &Trie::consistent_h);
         }
     }
     
