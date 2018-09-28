@@ -73,37 +73,15 @@ void FFT(InputIt start, InputIt finish)
 template<typename InputIt>
 void IFFT(InputIt start, InputIt finish)
 {
-    auto N = std::distance(start, finish);
+    std::transform(start, finish, start, [](auto& a){return std::conj(a);});
     
-    if (N < 2) 
-        return;
-    else {
-        // divide
-        auto mid = std::stable_partition(start, finish, [&start](auto& a){
-            a = std::conj(a); // conjugate value
-            return std::distance(&*start, &a) % 2 == 0; // pair indexes on the first half and odd on the last
-        });
-        
-        //conquer
-        FFT(start,  mid);   // recurse even items on normal FFT
-        FFT(mid, finish);   // recurse odd  items on normal FFT
-        
-        //combine
-        using value_type = typename std::iterator_traits<InputIt>::value_type;
-        
-        for (auto it = start; it != mid; std::advance(it, 1))
-        {
-            auto k = std::distance(start, it);
-            auto odd_it = mid + k;
-            auto w    = std::exp( value_type(0.0,-2.0 * pi() * k / N) ) * (*odd_it);
-            
-            //conjugate again and scale
-            *odd_it = std::conj(*it - w);
-            *odd_it /= N;
-            *it = std::conj(*it + w);
-            *it /= N;
-        }
-    }
+    FFT(start, finish);
+    
+    auto N = std::distance(start, finish);
+    std::transform(start, finish, start, [N](auto& a) {
+                                                          a = std::conj(a);
+                                                          return a /= N;
+                                                      });
 }
 
 int main()
