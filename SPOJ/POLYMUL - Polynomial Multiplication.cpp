@@ -47,24 +47,25 @@ void FFT(InputIt start, InputIt finish)
         return;
     else {
         // divide
-        std::stable_partition(start, finish, [&start](auto& a) {
+        auto mid = std::stable_partition(start, finish, [&start](auto& a) {
             return std::distance(&*start, &a) % 2 == 0; // pair indexes on the first half and odd on the last
         });
         
         //conquer
-        FFT(start, start + N/2);   // recurse even items
-        FFT(start + N/2,finish);   // recurse odd  items
+        FFT(start,  mid);   // recurse even items
+        FFT(mid, finish);   // recurse odd  items
         
         //combine
         using value_type = typename std::iterator_traits<InputIt>::value_type;
         
-        for (decltype(N) k = 0; k < N/2; ++k) {
-            auto even = *(start + k);
-            auto odd  = *(start + k + N/2);
-            auto w    = std::exp( value_type(0.0,-2 * pi() * k / N) ) * odd;
+        for (auto it = start; it != mid; std::advance(it, 1))
+        {
+            auto k = std::distance(start, it);
+            auto odd_it = mid + k;
+            auto w    = std::exp( value_type(0.0,-2.0 * pi() * k / N) ) * (*odd_it);
             
-            *(start + k) = even + w;
-            *(start + k + N/2) = even - w;
+            *odd_it = *it - w;
+            *it     = *it + w;
         }
     }
 }
@@ -78,28 +79,29 @@ void IFFT(InputIt start, InputIt finish)
         return;
     else {
         // divide
-        std::stable_partition(start, finish, [&start](auto& a){
+        auto mid = std::stable_partition(start, finish, [&start](auto& a){
             a = std::conj(a); // conjugate value
             return std::distance(&*start, &a) % 2 == 0; // pair indexes on the first half and odd on the last
         });
         
         //conquer
-        FFT(start, start + N/2);   // recurse even items on normal FFT
-        FFT(start + N/2,finish);   // recurse odd  items on normal FFT
+        FFT(start,  mid);   // recurse even items on normal FFT
+        FFT(mid, finish);   // recurse odd  items on normal FFT
         
         //combine
         using value_type = typename std::iterator_traits<InputIt>::value_type;
         
-        for (decltype(N) k = 0; k < N/2; ++k) {
-            auto even = *(start + k);
-            auto odd  = *(start + k + N/2);
-            auto w = std::exp( value_type(0.0, -2*pi()*k/N) ) * odd;
+        for (auto it = start; it != mid; std::advance(it, 1))
+        {
+            auto k = std::distance(start, it);
+            auto odd_it = mid + k;
+            auto w    = std::exp( value_type(0.0,-2.0 * pi() * k / N) ) * (*odd_it);
             
-            //conjugate again and scale 
-            *(start + k) = std::conj(even + w); 
-            *(start + k) /= N;
-            *(start + k + N/2) = std::conj(even - w);
-            *(start + k + N/2) /= N;
+            //conjugate again and scale
+            *odd_it = std::conj(*it - w);
+            *odd_it /= N;
+            *it = std::conj(*it + w);
+            *it /= N;
         }
     }
 }
@@ -121,7 +123,6 @@ int main()
         
         std::vector<std::complex<double>> A      (sz);
         std::vector<std::complex<double>> B      (sz);
-        std::vector<std::complex<double>> result (sz);
         
         std::copy_n(std::istream_iterator<long>(std::cin), n+1, std::begin(A));
         std::copy_n(std::istream_iterator<long>(std::cin), n+1, std::begin(B));
@@ -131,19 +132,19 @@ int main()
         FFT(std::begin(B), std::end(B));
         
         // Multiply
-        for (std::size_t i = 0; i < result.size(); ++i) 
+        for (std::size_t i = 0; i < sz; ++i) 
         {
-            result[i] = A[i] * B[i];
+            A[i] *= B[i];
         }
     
         // Inverse FFT
-        IFFT(std::begin(result), std::end(result));
+        IFFT(std::begin(A), std::end(A));
     
         // Remove padding zeroes
-        result.resize(2*n+1);
+        A.resize(2*n+1);
         
         // Print
-        for (auto& n: result)
+        for (auto& n: A)
             std::cout << static_cast<long>(std::round(n.real())) << " ";
         
         std::cout << std::endl;
