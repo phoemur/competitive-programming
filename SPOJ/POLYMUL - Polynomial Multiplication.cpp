@@ -38,50 +38,80 @@ Output:
 
 constexpr auto pi() {return atan(1)*4;}
 
-template<typename InputIt>
-void FFT(InputIt start, InputIt finish)
-{    
-    auto N = std::distance(start, finish);
+template<typename T>
+T bitReverse(T x, T log2n) 
+{ 
+    static_assert(std::is_integral<T>::value, "Only integral types");
     
-    if (N < 2) 
-        return;
-    else {
-        // divide
-        auto mid = std::stable_partition(start, finish, [&start](auto& a) {
-            return std::distance(&*start, &a) % 2 == 0; // pair indexes on the first half and odd on the last
-        });
-        
-        //conquer
-        FFT(start,  mid);   // recurse even items
-        FFT(mid, finish);   // recurse odd  items
-        
-        //combine
-        using value_type = typename std::iterator_traits<InputIt>::value_type;
-        
-        for (auto it = start; it != mid; std::advance(it, 1))
-        {
-            auto k = std::distance(start, it);
-            auto odd_it = mid + k;
-            auto w    = std::exp( value_type(0.0,-2.0 * pi() * k / N) ) * (*odd_it);
-            
-            *odd_it = *it - w;
-            *it     = *it + w;
-        }
+    T n = 0; 
+    for (T i = 0; i < log2n; ++i) 
+    { 
+        n <<= 1; 
+        n |= (x & 1); 
+        x >>= 1; 
+    } 
+    
+    return n; 
+} 
+
+void FFT(std::vector<std::complex<double>>& a)
+{    
+    const int n = a.size();
+    const auto log2n = static_cast<int>(std::log2(n));
+    
+    std::vector<std::complex<double>> tmp (n);
+    
+    // bit reversal of the given array 
+    for (int i = 0; i < n; ++i) { 
+        int rev = bitReverse(i, log2n); 
+        tmp[i] = a[rev]; 
     }
+    
+    // j is iota 
+    const std::complex<double> J(0, 1); 
+    for (int s = 1; s <= log2n; ++s) { 
+        int m = 1 << s; // 2 power s 
+        int m2 = m >> 1; // m2 = m/2 -1 
+        std::complex<double> w(1, 0); 
+  
+        // principle root of nth complex  
+        // root of unity. 
+        std::complex<double> wm = std::exp(J * (pi() / m2));  
+        for (int j = 0; j < m2; ++j) { 
+            for (int k = j; k < n; k += m) { 
+  
+                // t = twiddle factor 
+                auto t = w * tmp[k + m2];  
+                auto u = tmp[k]; 
+  
+                // similar calculating y[k] 
+                tmp[k] = u + t;  
+  
+                // similar calculating y[k+n/2] 
+                tmp[k + m2] = u - t;  
+            } 
+            w *= wm; 
+        } 
+    }
+    
+    a = std::move(tmp);
 }
 
-template<typename InputIt>
-void IFFT(InputIt start, InputIt finish)
+void IFFT(std::vector<std::complex<double>>& a)
 {
-    std::transform(start, finish, start, [](auto& a){return std::conj(a);});
+    // conjugate the complex numbers
+    for (auto& num: a)
+        num = std::conj(num);
     
-    FFT(start, finish);
+    // forward fft
+    FFT(a);
     
-    auto N = std::distance(start, finish);
-    std::transform(start, finish, start, [N](auto& a) {
-                                                          a = std::conj(a);
-                                                          return a /= N;
-                                                      });
+    // conjugate the complex numbers again and scale
+    for (auto& num: a) 
+    {
+        num = std::conj(num);
+        num /= a.size();
+    }
 }
 
 int main()
@@ -106,17 +136,17 @@ int main()
         std::copy_n(std::istream_iterator<long>(std::cin), n+1, std::begin(B));
     
         // Fast Fourier Transform
-        FFT(std::begin(A), std::end(A));
-        FFT(std::begin(B), std::end(B));
+        FFT(A);
+        FFT(B);
         
         // Multiply
-        for (std::size_t i = 0; i < sz; ++i) 
+        for (std::size_t i = 0; i < A.size(); ++i) 
         {
             A[i] *= B[i];
         }
     
         // Inverse FFT
-        IFFT(std::begin(A), std::end(A));
+        IFFT(A);
     
         // Remove padding zeroes
         A.resize(2*n+1);
