@@ -76,17 +76,15 @@ int main()
     s1.reserve(n*n*n);
     s2.reserve(n*n*n);
     
-    for (int i = 0; i < n; ++i)
-        for (int j = 0; j < n; ++j)
-            for (int k = 0; k < n; ++k)
-                s1.push_back(vec[i]*vec[j]+vec[k]);
-            
-    for (int i = 0; i < n; ++i)
-        for (int j = 0; j < n; ++j)
-            for (int k = 0; k < n; ++k)
-                if (vec[k] != 0)
-                    s2.push_back((vec[i]+vec[j])*vec[k]);
-            
+    for (auto& e1: vec)
+        for (auto& e2: vec)
+            for (auto& e3: vec)
+            {
+                s1.push_back(e1 * e2 + e3);
+                
+                if (e3 != 0)
+                    s2.push_back((e1 + e2) * e3);
+            }             
     
     std::sort(std::begin(s2), std::end(s2));
     
