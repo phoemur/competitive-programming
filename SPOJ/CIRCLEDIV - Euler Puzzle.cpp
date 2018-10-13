@@ -36,7 +36,7 @@ Case 3: 31
 #include <algorithm>
 #include <cstdio>
 
-constexpr static int MOD = 1000000007;
+#define MOD 1000000007
 
 // http://oeis.org/A000127
 int nCrmodP(int n, int k) {
@@ -69,24 +69,7 @@ int nCrmodP(int n, int k) {
         result = 1LL * result * d[i] % MOD;
     }
     
-    return result % MOD;
-}
-
-inline long solve(unsigned n)
-{
-    switch(n)
-    {
-        case 1:
-            return 1;
-        case 2:
-            return 2;
-        case 3:
-            return 4;
-        case 4:
-            return 8;
-        default:
-            return (nCrmodP(n, 4) + nCrmodP(n, 2) + 1) % MOD;
-    }
+    return result;
 }
 
 int main()
@@ -99,7 +82,10 @@ int main()
         int n;
         std::scanf("%d", &n);
         
-        std::printf("Case %d: %ld\n", i, solve(n));
+        if (n < 6)
+            std::printf("Case %d: %d\n", i, 1 << (n-1));
+        else
+            std::printf("Case %d: %d\n", i, (nCrmodP(n, 4) + nCrmodP(n, 2) + 1) % MOD);
     }
     
     
