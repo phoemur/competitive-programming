@@ -137,9 +137,7 @@ int main()
             vec.push_back(elem);
         }
         
-        long avrg = sum / m;
-        mx = std::max(mx, avrg);
-        
+       
         // Get best load using bsearch
         auto load = get_bestload(vec, mx, sum, k);
 
