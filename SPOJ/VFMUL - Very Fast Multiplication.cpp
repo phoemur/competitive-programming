@@ -4,6 +4,7 @@ https://www.spoj.com/problems/VFMUL/
 */
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <complex>
 #include <iostream>
