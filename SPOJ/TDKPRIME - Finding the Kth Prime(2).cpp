@@ -54,7 +54,7 @@ void BitSeive(int* output)
         }
     }
        
-    sieve[0] = 2;
+    output[0] = 2;
     for(i=3,j=1;i<MAX;i+=2)
         if(!ifComp(i))
             output[j++] = i;
