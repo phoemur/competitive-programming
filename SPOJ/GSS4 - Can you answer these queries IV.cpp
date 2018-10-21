@@ -95,24 +95,17 @@ void update_tree(int node, int a, int b, int i, int j)
         else
             update[node] = true;
     }
-    else
+    else if (update[node] == false)
+        return;
+    else        
     {
         int mid = (a + b) / 2;
         
-        if (a > mid)
-            update_tree(node*2+1, mid+1, b, i, j);
-        else if (b <= mid)
-            update_tree(node*2, a, mid, i, j);
-        else if (update[node] == false) // Do not need to update further
-            return;
-        else
-        {
-            update_tree(node*2,a,mid,i,j);
-            update_tree(node*2+1,mid+1,b,i,j);
+        update_tree(node*2,a,mid,i,j);
+        update_tree(node*2+1,mid+1,b,i,j);
             
-            tree[node] = tree[node*2] + tree[node*2+1];
-            update[node] = update[node*2] || update[node*2+1];
-        }
+        tree[node] = tree[node*2] + tree[node*2+1];
+        update[node] = update[node*2] || update[node*2+1];
     }  
 }
 
