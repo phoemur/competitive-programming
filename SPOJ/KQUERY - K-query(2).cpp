@@ -115,7 +115,12 @@ int main()
     }
     
     // Sort queries by decreasing order of k
-    std::sort(std::begin(queries), std::end(queries), [](const Query& a, const Query& b){return a.k > b.k;});
+    std::sort(std::begin(queries), 
+              std::end(queries), 
+              [](const Query& a, const Query& b)
+              {
+                  return a.k > b.k;
+              });
     
     // Solve
     int pos = 0;

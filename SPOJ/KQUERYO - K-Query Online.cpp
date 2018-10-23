@@ -50,7 +50,7 @@ There are invalid queries. Assume the following:
 #include <vector>
 
 int arr[30005];
-std::vector<int> tree[100005];
+std::vector<int> tree[100005]; // Merge Sort Tree
 
 void build_tree(const int node, 
                 const int a, 
