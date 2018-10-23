@@ -247,7 +247,6 @@ int main()
             }
             else if (type == 0)
             {
-
                 std::scanf("%d %d %d", &l, &r, &val);
                 
                 range_update_set(1, 0, n-1, l-1, r-1, val);
