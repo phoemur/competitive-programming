@@ -51,32 +51,35 @@ long solve_bottom_up(const std::vector<int>& arr)
     const int n = arr.size();
     static auto sum_mod = [](int a, int b){return (a + b) % 100;};
     
-    std::vector<std::vector<long>> dp (n, std::vector<long>(n, std::numeric_limits<int>::max()));
+    std::vector<std::vector<long>> dp (n, std::vector<long>(n));
 
-    for (int i = n-1; i >= 0; --i)
-    {
+    // Base cases
+    for (int i =0; i < n; ++i)
         for (int j = 0; j < n; ++j)
-        {
             if (i >= j)
                 dp[i][j] = 0;
             else
-            {
                 dp[i][j] = std::numeric_limits<int>::max();
-                for (int k = i; k < j; ++k)
-                {
-                    int csum1 = std::accumulate(std::begin(arr)+i, 
-                                                std::begin(arr)+k+1, 
-                                                0, 
-                                                sum_mod);
+    
+    // Fill table
+    for (int j = 1; j < n; ++j)
+    {
+        for (int i = j-1; i >= 0; --i)
+        {
+            for (int k = i; k < j; ++k)
+            {
+                int csum1 = std::accumulate(std::begin(arr)+i, 
+                                            std::begin(arr)+k+1, 
+                                            0, 
+                                            sum_mod);
             
-                    int csum2 = std::accumulate(std::begin(arr)+k+1, 
-                                                std::begin(arr)+j+1, 
-                                                0, 
-                                                sum_mod);
+                int csum2 = std::accumulate(std::begin(arr)+k+1, 
+                                            std::begin(arr)+j+1, 
+                                            0, 
+                                            sum_mod);
                     
-                    dp[i][j] = std::min(dp[i][j], 
-                                        dp[i][k] + dp[k+1][j] + (csum1*csum2));
-                }
+                dp[i][j] = std::min(dp[i][j], 
+                                    dp[i][k] + dp[k+1][j] + (csum1*csum2));
             }
         }
     }

@@ -50,10 +50,10 @@ inline void push_down(std::int64_t node,
     {
         tree[node] += lazy[node];
         
-        std::int64_t mid = (a + b) / 2;
-        
         if(a != b)
         {
+            std::int64_t mid = (a + b) / 2;
+            
             lazy[2*node]   += (lazy[node]/(b-a+1)) * (mid-a+1);
             lazy[2*node+1] += (lazy[node]/(b-a+1)) *   (b-mid);
         }

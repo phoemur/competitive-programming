@@ -55,10 +55,10 @@ inline void push_down(std::int64_t node,
     {
         tree[node] += lazy[node];
         
-        std::int64_t mid = (a + b) / 2;
-        
         if(a != b)
         {
+            std::int64_t mid = (a + b) / 2;
+            
             lazy[2*node]   += (lazy[node]/(b-a+1)) * (mid-a+1);
             lazy[2*node+1] += (lazy[node]/(b-a+1)) *   (b-mid);
         }
@@ -83,9 +83,8 @@ void update_tree(std::int64_t node,
     
     while (!st.empty())
     {
-        auto currnode = std::get<0>(st.top());
-        auto curra    = std::get<1>(st.top());
-        auto currb    = std::get<2>(st.top());
+        std::int64_t currnode, curra, currb;
+        std::tie(currnode, curra, currb) = st.top();
         st.pop();
       
         if (curra == currb && curra == INF) // Node merge flagged
@@ -93,31 +92,34 @@ void update_tree(std::int64_t node,
             tree[currnode] = tree[currnode*2] + tree[currnode*2+1];
             continue;
         }
-        
-        push_down(currnode, curra, currb);
-        
-        std::int64_t mid = (curra + currb) / 2;
-        
-        if(curra > currb || curra > j || currb < i) // No overlap
-            continue;
-        else if(curra >= i && currb <= j) // Total Overlap
+        else
         {
-            // Update lazily
-            tree[currnode] += val * (currb - curra + 1);
+            push_down(currnode, curra, currb);
         
-            if(curra != currb)
+            std::int64_t mid = (curra + currb) / 2;
+        
+            if(curra > currb || curra > j || currb < i) // No overlap
+                continue;
+            else if(curra >= i && currb <= j) // Total Overlap
             {
-                lazy[currnode*2]   += val * (mid - curra + 1);
-                lazy[currnode*2+1] += val * (currb - mid);
+                // Update lazily
+                tree[currnode] += val * (currb - curra + 1);
+        
+                if(curra != currb)
+                {
+                    lazy[currnode*2]   += val * (mid - curra + 1);
+                    lazy[currnode*2+1] += val * (currb - mid);
+                }
             }
-        }
-        else // Partial Overlap
-        {
-            st.emplace(currnode, INF, INF); // Flag a Node merge (postorder)
+            else // Partial Overlap
+            {
+                // Flag this node to be merged postorder
+                st.emplace(currnode, INF, INF); 
             
-            // Push children
-            st.emplace(currnode*2, curra, mid);
-            st.emplace(currnode*2+1, mid+1, currb);
+                // Push children
+                st.emplace(currnode*2, curra, mid);
+                st.emplace(currnode*2+1, mid+1, currb);
+            }
         }
     }
 }
@@ -138,9 +140,8 @@ std::int64_t query(std::int64_t node,
     
     while (!st.empty())
     {
-        auto currnode = std::get<0>(st.top());
-        auto curra    = std::get<1>(st.top());
-        auto currb    = std::get<2>(st.top());
+        std::int64_t currnode, curra, currb;
+        std::tie(currnode, curra, currb) = st.top();
         st.pop();
       
         push_down(currnode, curra, currb);
