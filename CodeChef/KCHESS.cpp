@@ -61,17 +61,21 @@ In the first test case, the king is in cannot move to any valid position In seco
 #include <vector>
 #include <utility>
 
-static const std::array<std::pair<int,int>, 8> knight_moves {{{2 , 1}, {1 , 2}, 
-                                                              {-1, 2}, {-2, 1},
-                                                              {-2,-1}, {-1,-2},
-                                                              {1 ,-2}, {2 ,-1}}};
+static const std::array<std::pair<int,int>, 8> knight_moves 
+    {{{2 , 1}, {1 , 2}, 
+      {-1, 2}, {-2, 1},
+      {-2,-1}, {-1,-2},
+      {1 ,-2}, {2 ,-1}}};
                                                               
-static const std::array<std::pair<int,int>, 8> king_moves {{{-1,-1}, {-1,0}, {-1,1},
-                                                            {0, -1},         {0, 1},
-                                                            {1, -1}, {1, 0}, {1, 1}}};                                                              
+static const std::array<std::pair<int,int>, 8> king_moves 
+    {{{-1,-1}, {-1,0}, {-1,1},
+      {0, -1},         {0, 1},
+      {1, -1}, {1, 0}, {1, 1}}};                                                              
 
 // Checks if board[i][j] is a valid move
-inline bool is_valid_move(const std::vector<std::vector<char>>& board, int i, int j)
+inline bool is_valid_move(const std::vector<std::vector<char>>& board, 
+                          int i, 
+                          int j)
 {
     if (i < 0 || i >= static_cast<int>(board.size())) 
         return false;
@@ -82,7 +86,9 @@ inline bool is_valid_move(const std::vector<std::vector<char>>& board, int i, in
 }
 
 // Checks if board[i][j] is under attack by a knight
-inline bool is_under_attack(const std::vector<std::vector<char>>& board, int i, int j)
+inline bool is_under_attack(const std::vector<std::vector<char>>& board, 
+                            int i, 
+                            int j)
 {
     for (auto& p: knight_moves)
     {
@@ -102,7 +108,9 @@ inline bool is_under_attack(const std::vector<std::vector<char>>& board, int i, 
 }
 
 // Checks if the king at board[king_x][king_y] is under checkmate
-bool is_checkmate(const std::vector<std::vector<char>>&  board, int king_x, int king_y)
+bool is_checkmate(const std::vector<std::vector<char>>&  board, 
+                  int king_x, 
+                  int king_y)
 {
     if (!is_under_attack(board, king_x, king_y))
         return false;
@@ -113,7 +121,8 @@ bool is_checkmate(const std::vector<std::vector<char>>&  board, int king_x, int 
             int next_i = king_x + p.first;
             int next_j = king_y + p.second;
             
-            if (is_valid_move(board, next_i, next_j) && board[next_i][next_j] == ' ')
+            if (is_valid_move(board, next_i, next_j) && 
+                board[next_i][next_j] == ' ')
             {
                 if (!is_under_attack(board, next_i, next_j))
                 {
@@ -158,8 +167,9 @@ int main()
         
         // Place Knights
         for (auto& p: positions)
-            if (is_valid_move(board, king.first - p.first + 3, king.second - p.second + 3))
-                board[king.first - p.first + 3][king.second - p.second + 3] = 'k';
+            if (is_valid_move(board, king.first - p.first + 3, 
+                              king.second - p.second + 3))
+                board[king.first-p.first+3][king.second-p.second+3] = 'k';
                    
         // Solve
         if (is_checkmate(board, 3, 3))
