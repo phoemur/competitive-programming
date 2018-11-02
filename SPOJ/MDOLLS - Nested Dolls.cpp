@@ -103,5 +103,5 @@ int main()
         std::cout << solve(dolls) << std::endl;
     }
     
-    return 0;;
+    return 0;
 }
