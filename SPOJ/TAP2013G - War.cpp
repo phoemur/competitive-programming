@@ -62,7 +62,7 @@ int main()
     std::sort(N.begin(), N.end());
     
     // 2 pointers solve
-    int res = 0;
+    int res   = 0;
     int ptr_q = 0;
     int ptr_n = 0;
     
