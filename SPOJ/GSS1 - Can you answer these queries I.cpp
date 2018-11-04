@@ -83,7 +83,9 @@ void build_tree(int node, int a, int b)
 
 Node query_tree(int node, int a, int b, int i, int j) 
 {
-    if(a==i && b==j)
+    if (a > b || a > j || b < i)
+        return Node{};
+    else if(a>=i && b<=j)
         return tree[node];
 
     int mid = (a + b) / 2;
