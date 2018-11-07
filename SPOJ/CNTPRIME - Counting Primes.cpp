@@ -74,7 +74,7 @@ int tree[100001]; // Segment Tree
 int lazy[100001]; // Lazy Propagation array
 
 // Perform bitwise Sieve of Eratosthenes
-void BitSeive()
+void bit_sieve()
 {
     for(int i = 3; i < LIM; i += 2)
     {
@@ -88,7 +88,7 @@ void BitSeive()
 }
 
 // Check if num is prime
-inline bool isPrime(int num)
+inline bool is_prime(int num)
 {
     return num == 2 || ((num & 1) && (!ifComp(num)));
 }
@@ -100,7 +100,7 @@ void build_tree(int node, int lo, int hi)
         return;
     else if (lo == hi) // Leaf Node
     {
-        if (isPrime(arr[lo]))
+        if (is_prime(arr[lo]))
             tree[node] = 1;
         else
             tree[node] = 0;
@@ -121,7 +121,7 @@ inline void push_down(int node, int a, int b)
 {
     if(lazy[node] != -1)
     {
-        if (isPrime(lazy[node]))
+        if (is_prime(lazy[node]))
             tree[node] = b - a + 1;
         else
             tree[node] = 0;
@@ -148,7 +148,7 @@ void update_tree(int node,
     else if(a >= i && b <= j)
     {
         // Update lazily
-        if (isPrime(val))
+        if (is_prime(val))
             tree[node] = b - a + 1;
         else
             tree[node] = 0;
@@ -160,8 +160,8 @@ void update_tree(int node,
     {
         int mid = (a + b) / 2;
         
-        update_tree(node*2, a, mid, i, j, val);
-        update_tree(node*2+1, mid+1, b, i, j, val);
+        update_tree(node*2,       a, mid, i, j, val);
+        update_tree(node*2+1, mid+1,   b, i, j, val);
         
         tree[node] = tree[node*2] + tree[node*2+1];
     }
@@ -179,8 +179,8 @@ int query(int node, int a, int b, int i, int j)
     else // Partial overlap
     {
         int mid = (a + b) / 2;
-        int q1 = query(node*2, a, mid, i, j);
-        int q2 = query(node*2+1, mid+1, b, i, j);
+        int q1 = query(node*2,       a, mid, i, j);
+        int q2 = query(node*2+1, mid+1,   b, i, j);
 
         return q1 + q2;
     }
@@ -189,7 +189,7 @@ int query(int node, int a, int b, int i, int j)
 int main()
 {
     std::memset(flagArr, 0, sizeof(int) * 15625);
-    BitSeive();
+    bit_sieve();
     
     int tests;
     std::scanf("%d", &tests);

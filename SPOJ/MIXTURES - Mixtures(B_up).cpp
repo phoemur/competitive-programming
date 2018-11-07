@@ -39,27 +39,31 @@ In the second test case, there are two possibilities:
 
 The first scenario is a much better way to proceed. */
 
-#include <algorithm>
 #include <iostream>
-#include <iterator>
-#include <limits>
-#include <numeric>
 #include <vector>
 
-long solve_bottom_up(const std::vector<int>& arr)
-{
-    const int n = arr.size();
-    static auto sum_mod = [](int a, int b){return (a + b) % 100;};
-    
-    std::vector<std::vector<long>> dp (n, std::vector<long>(n));
+static const int INF = 1 << 30;
 
+template<typename T>
+T minimum(T t1, T t2)
+{
+    return t1 < t2 ? t1 : t2;
+}
+
+int solve_bottom_up(const std::vector<int>& preffix_sum)
+{
+    const int n = preffix_sum.size() - 1;
+
+    // DP vector
+    std::vector< std::vector<int> > dp (n, std::vector<int>(n));
+    
     // Base cases
     for (int i =0; i < n; ++i)
         for (int j = 0; j < n; ++j)
             if (i >= j)
                 dp[i][j] = 0;
             else
-                dp[i][j] = std::numeric_limits<int>::max();
+                dp[i][j] = INF;
     
     // Fill table
     for (int j = 1; j < n; ++j)
@@ -68,18 +72,11 @@ long solve_bottom_up(const std::vector<int>& arr)
         {
             for (int k = i; k < j; ++k)
             {
-                int csum1 = std::accumulate(std::begin(arr)+i, 
-                                            std::begin(arr)+k+1, 
-                                            0, 
-                                            sum_mod);
-            
-                int csum2 = std::accumulate(std::begin(arr)+k+1, 
-                                            std::begin(arr)+j+1, 
-                                            0, 
-                                            sum_mod);
+                int csum1 = (preffix_sum[k+1] - preffix_sum[i])   % 100;            
+                int csum2 = (preffix_sum[j+1] - preffix_sum[k+1]) % 100;
                     
-                dp[i][j] = std::min(dp[i][j], 
-                                    dp[i][k] + dp[k+1][j] + (csum1*csum2));
+                dp[i][j] = minimum(dp[i][j], 
+                                   dp[i][k] + dp[k+1][j] + (csum1*csum2));
             }
         }
     }
@@ -94,10 +91,18 @@ int main()
     int n;
     while (std::cin >> n)
     {
-        std::vector<int> arr (n);        
-        std::copy_n(std::istream_iterator<int>(std::cin), n, std::begin(arr));
+        // Input as Preffix Sum vector
+        std::vector<int> preffix_sum (n+1);        
+        preffix_sum[0] = 0;
         
-        std::cout << solve_bottom_up(arr) << std::endl;
+        for (int i = 1; i <= n; ++i)
+        {
+            std::cin >> preffix_sum[i];
+            preffix_sum[i] += preffix_sum[i-1];
+        }
+        
+        // Solve
+        std::cout << solve_bottom_up(preffix_sum) << std::endl;
     }
     
     return 0;
