@@ -58,6 +58,12 @@ Sample Output:
 #include <vector>
 #include <utility>
 
+bool compare(const std::pair<int,int>& lhs, const std::pair<int,int>& rhs)
+{
+    return lhs.second == rhs.second ? lhs.first  < rhs.first :
+                                      lhs.second < rhs.second;
+}
+
 int solve_greedy(const std::vector<std::pair<int,int>>& vec)
 {
     int res    = 0; // Activities so far
@@ -92,9 +98,7 @@ int main()
             std::scanf("%d %d", &p.first, &p.second);
 
         // Sort by finishing times
-        std::sort(vec.begin(), vec.end(), [](auto& a, auto& b) {
-            return a.second < b.second;
-        });
+        std::sort(vec.begin(), vec.end(), compare);
 
         // Solve with greedy algorithm
         std::printf("%d\n", solve_greedy(vec));
