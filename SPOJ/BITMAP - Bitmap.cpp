@@ -131,8 +131,6 @@ int main()
                 std::scanf(" %c", &curr);
                 if (curr == '1')
                     vec[i][j] = 0;
-                else
-                    vec[i][j] = INF;
             }
         }
 
