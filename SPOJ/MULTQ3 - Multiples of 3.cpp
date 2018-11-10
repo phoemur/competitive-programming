@@ -128,8 +128,8 @@ Node query(int node, int a, int b, int i, int j)
     else // Partial overlap
     {
         int mid = (a + b) / 2;
-        Node q1 = query(node*2, a, mid, i, j);
-        Node q2 = query(node*2+1, mid+1, b, i, j);
+        Node q1 = query(node*2,       a, mid, i, j);
+        Node q2 = query(node*2+1, mid+1,   b, i, j);
 
         return q1 + q2;
     }
