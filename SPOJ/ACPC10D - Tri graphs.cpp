@@ -60,17 +60,17 @@ long solve(const std::vector<std::vector<int>>& graph, int i, int j)
     else if (i == graph.size() - 1 && j == 1)
         memo[i][j] = graph[i][j];
     else if (j == 0)
-        memo[i][j] = graph[i][j] + minimum(solve(graph,   i, 1), 
-                                           solve(graph, i+1, 0), 
-                                           solve(graph, i+1, 1));
+        memo[i][j] = graph[i][j] + minimum(solve(graph,   i, j+1), 
+                                           solve(graph, i+1,   j), 
+                                           solve(graph, i+1, j+1));
     else if (j == 1)
-        memo[i][j] = graph[i][j] + minimum(solve(graph, i+1, 0), 
-                                           solve(graph, i+1, 1), 
-                                           solve(graph, i+1, 2),
-                                           solve(graph,   i, 2));
+        memo[i][j] = graph[i][j] + minimum(solve(graph, i+1, j-1), 
+                                           solve(graph, i+1,   j), 
+                                           solve(graph, i+1, j+1),
+                                           solve(graph,   i, j+1));
     else // j == 2
-        memo[i][j] = graph[i][j] + minimum(solve(graph, i+1, 2),
-                                           solve(graph, i+1, 1));
+        memo[i][j] = graph[i][j] + minimum(solve(graph, i+1, j),
+                                           solve(graph, i+1, j-1));
         
     return memo[i][j];
 }
