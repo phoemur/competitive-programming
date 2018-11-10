@@ -81,6 +81,7 @@ long solve_bottom_up(const std::vector<std::vector<int>>& graph)
     // Base cases
     dp[n-1][1] = graph[n-1][1];
     dp[n-1][0] = dp[n-1][1] + graph[n-1][0];
+    dp[n-1][2] = INF;
     
     // Fill table
     for (int i = n-2; i >= 0; --i)
@@ -109,6 +110,7 @@ int solve_optimized(const std::vector<std::vector<int>>& graph)
     // Base cases
     dp[1][1] = graph[n-1][1];
     dp[1][0] = dp[1][1] + graph[n-1][0];
+    dp[1][2] = INF;
     
     // Fill table
     for (int i = n-2; i >= 0; --i)
