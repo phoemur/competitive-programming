@@ -49,12 +49,11 @@ int LIS(const std::vector<int>& vec)
     for (int i = 0; i < n; i++)
     {
         auto it = std::upper_bound(d.begin(), d.end(), vec[i]);
-        int j = std::distance(d.begin(), it);
         
-        if (d[j-1] < vec[i] && vec[i] < d[j])
+        if (*(it - 1) < vec[i] && vec[i] < *it)
         {    
-            d[j] = vec[i];
-            ans = std::max(ans, j);
+            *it = vec[i];
+            ans = std::max(ans, (int)std::distance(d.begin(), it));
         }
     }
 
