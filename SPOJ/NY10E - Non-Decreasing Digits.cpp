@@ -37,18 +37,11 @@ int main()
     
     // Fill dp for binomial coeficients
     for (int i = 0; i < 74; i++) 
-    { 
         for (int j = 0; j <= std::min(i, 9); j++) 
-        { 
-            // Base Cases 
             if (j == 0 || j == i) 
                 dp[i][j] = 1; 
-  
-            // Calculate value using previosly stored values 
             else
                 dp[i][j] = dp[i-1][j-1] + dp[i-1][j]; 
-        } 
-    }
     
     int tests;
     std::cin >> tests;
