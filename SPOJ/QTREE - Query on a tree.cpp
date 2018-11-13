@@ -52,14 +52,20 @@ Output:
 #define N 10100
 #define LN 14
 
-int heavy[N], chainHead[N], height[N], par[N];
-int baseArr[N], posInBase[N], segtree[6*N];
-int p[20][N];
+int heavy[N]; // Stores the next node for the same heavy chain
+int chainHead[N]; // Stores the head of its heavy chain for any node
+int height[N]; // height of the node
+int par[N];    // parent of the node
+int baseArr[N]; // Array used to build the segment tree
+int posInBase[N]; // Position of the node on the segtree
+int segtree[6*N]; // Segment tree
+int p[20][N]; // Dynamic Programming LCA array
 
 int pos = 0;
 
-std::vector<std::pair<int,int>> edge;
-std::vector<int> adj[N], cost[N];
+std::vector<std::pair<int,int>> edge; // Maps edge numbers to node numbers -> pair [source, dest]
+std::vector<int> adj[N];  // Adjacency List
+std::vector<int> cost[N]; // Cost of the edges, with same coord. from adjlist 
 
 template<typename T>
 constexpr T maximum(T t1, T t2)
@@ -67,7 +73,7 @@ constexpr T maximum(T t1, T t2)
     return t1 > t2 ? t1: t2;
 }
 
-int lca(int u,int v)
+int lca(int u, int v)
 {
     if (height[u] > height[v])
         std::swap(u,v);
@@ -95,7 +101,7 @@ int lca(int u,int v)
     return p[0][v];
 }
 
-
+// DFS traversal of the tree. Fills parent, height and finds the heavy child
 int dfs(int node)
 {
     int size = 1;
@@ -123,6 +129,7 @@ int dfs(int node)
     return size;
 }
 
+// Heavy-light decomposition of the tree
 void hl_decompose(int node, int h)
 {
     chainHead[node] = h;
@@ -148,8 +155,7 @@ void hl_decompose(int node, int h)
             hl_decompose(c, c);
 }
 
-
-
+// Build Segtree
 void build_segtree(int node, int lo, int hi)
 {
     if (lo > hi)
@@ -167,6 +173,7 @@ void build_segtree(int node, int lo, int hi)
     }
 }
 
+// Range query
 int query_segtree(int node, int lo, int hi, int i, int j)
 {
     if (lo > hi || lo > j || hi < i)
@@ -203,6 +210,7 @@ void update_segtree(int node, int lo, int hi, int idx, int val)
     }
 }
 
+// Query Tree using HLD
 int query(int u, int v)
 {
     int l = lca(u,v);
@@ -279,7 +287,7 @@ int main()
         
         for(int i=0;i<n-1;i++)
         {
-            std::scanf("%d%d%d",&xx,&yy,&zz);
+            std::scanf("%d %d %d", &xx, &yy, &zz);
             xx--;yy--;
             adj[xx].push_back(yy);
             adj[yy].push_back(xx);
@@ -305,7 +313,7 @@ int main()
         int a, b;
         while(std::scanf("%s",s) != EOF && s[0] != 'D')
         {
-            std::scanf("%d%d",&a,&b);
+            std::scanf("%d %d",&a,&b);
 
             if(s[0] == 'C')
             {
