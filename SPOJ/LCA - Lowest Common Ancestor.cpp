@@ -43,7 +43,7 @@ Case 1:
 #include <iostream>
 #include <vector>
 
-// O(n) just works
+// O(height) just works
 int LCA(int a, int b, 
         const std::vector<int>& depth, 
         const std::vector<int>& parent)
