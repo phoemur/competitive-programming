@@ -108,10 +108,8 @@ int query_segtree(int node, int lo, int hi, int i, int j)
             return q2;
         else if (q2 == -1)
             return q1;
-        else if (level_tour[q2] > level_tour[q1])
-            return q1;
         else
-            return q2;
+            return level_tour[q2] > level_tour[q1] ? q1 : q2;
     }
 }
 
@@ -137,7 +135,6 @@ int main()
     for (int cas = 1; cas <= tests; ++cas)
     {
         // Clean up
-        std::memset(segtree, 0, sizeof(int) * N * 3);
         euler_tour.clear();
         level_tour.clear();
         std::fill(indexx, indexx+N, -1);
@@ -164,8 +161,7 @@ int main()
         
         // DFS and fill datastructures
         DFS(1, 1, adj);
-        int sz = euler_tour.size();
-        build_segtree(1, 0, sz-1);
+        build_segtree(1, 0, euler_tour.size() - 1);
         
         /* 
         std::cout << "Euler Tour:\n";
