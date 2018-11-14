@@ -40,7 +40,6 @@ Case 1:
 */
 
 #include <algorithm>
-#include <cstring>
 #include <iostream>
 #include <vector>
 
