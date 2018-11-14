@@ -53,7 +53,7 @@ Output:
 #define LN 14
 
 int heavy[N]; // Stores the next node for the same heavy chain
-int chainHead[N]; // Stores the head of its heavy chain for any node
+int chainHead[N]; // Stores the head of its heavy chain, for any node
 int height[N]; // height of the node
 int par[N];    // parent of the node
 int baseArr[N]; // Array used to build the segment tree
@@ -249,6 +249,7 @@ void update(int a, int val)
     update_segtree(1, 0, pos-1, posInBase[v], val);
 }
 
+// Reset datastructures for a new testcase
 void cleanup(int n)
 {
     for(int i=0;i<n+2;i++)
