@@ -43,51 +43,44 @@ Sample output
 #include <iterator>
 #include <vector>
 
-#define N 1000002
-
-constexpr static int MIN = -1 * (1 << 20); 
-
-long memo[2][N];
-
-long solve(const std::vector<int>& vec, int pos, int direction)
+long solve(const std::vector<int>& vec, int pos)
 {
-    if (pos == 1 && direction == 0)
-        return 0;
-    else if (memo[direction][pos] != MIN)
-        return memo[direction][pos];
-    else
-    {
-        long res = MIN;
+    const int n = vec.size();
+    
+    std::vector<long> dp_f (n);
+    std::vector<long> dp_b (n);
         
-        if (direction == 1)
-        {
-            if (pos     < vec.size()) res = std::max(res, vec[pos]   + solve(vec, pos+1, 1));
-            if (pos + 1 < vec.size()) res = std::max(res, vec[pos+1] + solve(vec, pos+2, 1));
-        }
-
-        if (pos > 1) res = std::max(res, vec[pos-2] + solve(vec, pos-1, 0));
-        if (pos > 2) res = std::max(res, vec[pos-3] + solve(vec, pos-2, 0));
+    // Backward
+    dp_b[1] = vec[1];
+    dp_b[2] = vec[1] + vec[2];
+    for (int i = 3; i < n; ++i)
+        dp_b[i] = vec[i] + std::max(dp_b[i-1], dp_b[i-2]);
+    
+    // Forward
+    dp_f[pos]   = 0;
+    dp_f[pos-1] = 0;
+    for (int i = pos + 1; i < n; ++i)
+        dp_f[i] = vec[i] + std::max(dp_f[i-1], dp_f[i-2]);
+    
+    // Combine
+    long res = -1 * (1 << 20);
+    for (int i = pos; i < n; ++i)
+        res = std::max(res, dp_f[i] + dp_b[i] - vec[i]);
         
-        memo[direction][pos] = res;
-        return res;
-    }
+    return res;
 }
 
 int main()
 {
     std::ios_base::sync_with_stdio(false);
     
-    std::fill(memo[0], memo[0]+N, MIN);
-    std::fill(memo[1], memo[1]+N, MIN);
-    
     int n, k;
     std::cin >> n >> k;
     
-    std::vector<int> vec (n);
-    std::copy_n(std::istream_iterator<int>(std::cin), n, std::begin(vec));
+    std::vector<int> vec (n+1);
+    std::copy_n(std::istream_iterator<int>(std::cin), n, std::begin(vec)+1);
        
-    long res = std::max(solve(vec, k, 1), solve(vec, k, 0));
-    std::cout << res << std::endl;
+    std::cout << solve(vec, k) << std::endl;
     
     return 0;
 }
