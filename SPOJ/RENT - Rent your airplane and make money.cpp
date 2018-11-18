@@ -78,6 +78,7 @@ int main()
         
         std::vector<int> dp (n);
         
+        // Almost same as LIS
         for (int i = 0; i < n; ++i)
             dp[i] = vec[i].price;
         
