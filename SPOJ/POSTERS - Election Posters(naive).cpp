@@ -78,6 +78,7 @@ int main()
             mx = std::max(mx, elem.b);
         }
         
+        // Fill wall with naive O(n^2)
         std::vector<int> wall (mx+1, 0);
         
         for (int i = 0; i < n; ++i)
@@ -86,6 +87,7 @@ int main()
                 wall[j] = i + 1;
         }
         
+        // Result is the number of unique elements (excluding zero)
         std::sort(wall.begin(), wall.end());
         
         auto it = std::unique(wall.begin(), wall.end());
