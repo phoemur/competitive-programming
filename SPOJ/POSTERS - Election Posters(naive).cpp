@@ -30,8 +30,6 @@ An illustration of the sample input is given below.*/
 
 #include <algorithm>
 #include <cstdio>
-#include <cstring>
-#include <set>
 #include <vector>
 
 struct Poster {
@@ -78,7 +76,7 @@ int main()
             mx = std::max(mx, elem.b);
         }
         
-        // Fill wall with naive O(n^2)
+        // Fill wall with naive O(n*m)
         std::vector<int> wall (mx+1, 0);
         
         for (int i = 0; i < n; ++i)
