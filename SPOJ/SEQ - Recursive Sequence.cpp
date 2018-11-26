@@ -6,7 +6,7 @@ Sequence (ai) of natural numbers is defined as follows:
    ai = bi (for i <= k)
    ai = c1ai-1 + c2ai-2 + ... + ckai-k (for i > k)
 
-where bj and cj are given natural numbers for 1<=j<=k. Your task is to compute an for given n and output it modulo 109.
+where bj and cj are given natural numbers for 1<=j<=k. Your task is to compute an for given n and output it modulo 1e9.
 Input
 
 On the first row there is the number C of test cases (equal to about 1000).
@@ -80,7 +80,7 @@ std::vector<std::vector<long>> power(std::vector<std::vector<long>> base, // pas
         if (exp & 1)
             res = res * base;
         
-        base = base * base;
+        base = base * base; // Square the base
         exp >>= 1;
     }
     
