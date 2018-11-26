@@ -123,10 +123,10 @@ void hl_decompose(int node, int h)
         target_set[chainHead[node]] = cur++;
     
     // Recurrence
-    if (heavy[node] != -1)
+    if (heavy[node] != -1) // Extend this heavy chain
         hl_decompose(heavy[node], h);
     
-    for (int c : adj[node])
+    for (int c : adj[node]) // Create new chains
         if (c != par[node] && c != heavy[node])
             hl_decompose(c, c);
 }
