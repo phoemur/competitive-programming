@@ -37,8 +37,7 @@ Ada
 
 int memo[10000][101][2];
 
-/* As we don't have to calculate answers from all numbers in the
- * interval [0,9999], a top down approach seems more suitable */
+/* Dynamic Programming Top Down (memoization) */
 int solve_recursive(int number, int moves, int maximizer)
 {
     if (moves == 0)
