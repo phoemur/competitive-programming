@@ -32,12 +32,12 @@ Ada
 */
 
 #include <algorithm>
-#include <iostream>
+#include <cstdio>
 
 int main()
 {
     // 3D dynamic programming table
-    int dp[10000][101][2];
+    short int dp[10000][101][2];
     
     for (int i = 0; i < 10000; ++i)
         dp[i][0][0] = dp[i][0][1] = i; // Base cases (moves == 0)
@@ -60,17 +60,17 @@ int main()
     }
     
     int tests;
-    std::cin >> tests;
+    std::scanf("%d", &tests);
     
     while (tests--)
     {
         int input, moves;
-        std::cin >> input >> moves;
+        std::scanf("%d %d", &input, &moves);
         
         if (dp[input][moves][1] > input)
-            std::cout << "Ada" << std::endl;
+            std::printf("Ada\n");
         else
-            std::cout << "Vinit" << std::endl;
+            std::printf("Vinit\n");
     }
     
     return 0;
