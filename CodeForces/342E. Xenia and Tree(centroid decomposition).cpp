@@ -92,25 +92,17 @@ int cent_decompose(int node, int par = -1)
 {
     int total_sz = DFS_sizes(node, -1);
     
-    if (total_sz == 1) // Leaf node on centroid tree
-    {
-        removed[node] = true;
-        cent_parent[node] = par;
-        return node;
-    }
-    else
-    {
-        int centroid = get_centroid(node, total_sz, -1);
-        removed[centroid] = true;
-        cent_parent[centroid] = par;
+    int centroid = get_centroid(node, total_sz, -1);
+    removed[centroid] = true;
+    cent_parent[centroid] = par;
         
-        // Populate centroid tree
-        for (auto& elem : adj[centroid])
-            if (!removed[elem])
-                centroid_tree[centroid].push_back(cent_decompose(elem, centroid));
+    // Populate centroid tree
+    for (auto& elem : adj[centroid])
+        if (!removed[elem])
+            centroid_tree[centroid].push_back(cent_decompose(elem, centroid));
         
-        return centroid;
-    }
+    return centroid;
+
 }
 
 void DFS_levels(int node, int par, int lev)
