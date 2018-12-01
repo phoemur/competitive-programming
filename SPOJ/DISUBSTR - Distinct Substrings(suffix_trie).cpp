@@ -72,14 +72,14 @@ private:
                 std::size_t index = 0)
     {
         if (!head) {head = getNewTrieNode();}
-        if (index == str.size()) {
+        
+        if (index == str.size())
             head->isLeaf = true;
-            return;
-        }
-        else {
-            if (!head->map[str[index]]) {
+        else
+        {
+            if (!head->map[str[index]])
                 head->map[str[index]] = getNewTrieNode();
-            }
+            
             insert(head->map[str[index]], str, index+1);
         }
     }
