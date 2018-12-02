@@ -43,7 +43,7 @@ Example Output
 #define MOD 1000000007
 
 // http://oeis.org/A002464 -> OEIS rocks
-// Google Hertzsprung's problem: The number of ways to arrange n non-attacking kings on an n X n board, with 1 in each row and column.
+// Google: Hertzsprung's problem - The number of ways to arrange n non-attacking kings on an n X n board, with 1 in each row and column.
 
 // Ilustrates recurrence relation
 long solve_recursive(int n)

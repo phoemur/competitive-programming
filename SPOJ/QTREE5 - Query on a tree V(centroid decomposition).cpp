@@ -66,12 +66,12 @@ std::vector<int> adj[MAXN];           // Tree Adjacency List
 std::vector<int> centroid_tree[MAXN]; // Centroid Tree Adjacency List
 std::multiset<int> ans[MAXN];         // Used to map distances from centroid[i] to a white node
 
-int subsizes[MAXN];    // For calculating subsizes during the decomposition
-bool removed[MAXN];    // Marks removed nodes during the decomposition
+int    subsizes[MAXN]; // For calculating subsizes during the decomposition
+bool    removed[MAXN]; // Marks removed nodes during the decomposition
 int cent_parent[MAXN]; // parents on the decomposed tree
-int level[MAXN];       // level of node on the original tree
+int       level[MAXN]; // level of node on the original tree
 int dp[MAXLOGN][MAXN]; // Used to calculate LCA on the original tree
-bool is_white[MAXN];   // Used to check the color of a node
+bool   is_white[MAXN]; // Used to check the color of a node
 
 inline void init(int n)
 {
