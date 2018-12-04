@@ -48,14 +48,12 @@ inline void push_down(std::int64_t node,
 {
     if(lazy[node] != 0)
     {
-        tree[node] += lazy[node];
+        tree[node] += lazy[node] * (b - a + 1);
         
         if(a != b)
         {
-            std::int64_t mid = (a + b) / 2;
-            
-            lazy[2*node]   += (lazy[node]/(b-a+1)) * (mid-a+1);
-            lazy[2*node+1] += (lazy[node]/(b-a+1)) *   (b-mid);
+            lazy[2*node]   += lazy[node];
+            lazy[2*node+1] += lazy[node];
         }
         
         lazy[node] = 0;
@@ -78,18 +76,18 @@ void update_tree(std::int64_t node,
     else if(a >= i && b <= j)
     {
         // Update lazily
-        tree[node] += val*(b-a+1);
+        tree[node] += val * (b - a + 1);
         
         if(a!=b)
         {
-            lazy[node*2]   += val * (mid-a+1);
-            lazy[node*2+1] += val *   (b-mid);
+            lazy[node*2]   += val;
+            lazy[node*2+1] += val;
         }
     }
     else
     {
-        update_tree(node*2, a, mid, i, j, val);
-        update_tree(node*2+1, mid+1, b, i, j, val);
+        update_tree(node*2,       a, mid, i, j, val);
+        update_tree(node*2+1, mid+1,   b, i, j, val);
         
         tree[node] = tree[node*2] + tree[node*2+1];
     }
@@ -106,8 +104,9 @@ std::int64_t query(std::int64_t node, std::int64_t a, std::int64_t b, std::int64
     else // Partial overlap
     {
         std::int64_t mid = (a + b) / 2;
-        std::int64_t q1 = query(node*2, a, mid, i, j);
-        std::int64_t q2 = query(node*2+1, mid+1, b, i, j);
+        
+        std::int64_t q1 = query(node*2,       a, mid, i, j);
+        std::int64_t q2 = query(node*2+1, mid+1,   b, i, j);
 
         return q1 + q2;
     }
