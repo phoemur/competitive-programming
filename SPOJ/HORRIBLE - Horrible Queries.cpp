@@ -69,9 +69,8 @@ void update_tree(std::int64_t node,
 {
     push_down(node, a, b);
 
-    std::int64_t mid = (a + b) / 2;
     
-    if(a>b || a>j || b<i)
+    if(a > b || a > j || b < i)
         return;
     else if(a >= i && b <= j)
     {
@@ -86,6 +85,8 @@ void update_tree(std::int64_t node,
     }
     else
     {
+        std::int64_t mid = (a + b) / 2;
+        
         update_tree(node*2,       a, mid, i, j, val);
         update_tree(node*2+1, mid+1,   b, i, j, val);
         

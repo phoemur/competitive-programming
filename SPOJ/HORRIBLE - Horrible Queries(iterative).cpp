@@ -46,6 +46,8 @@ std::int64_t lazy[4000001];
 
 constexpr static int INF = std::numeric_limits<int>::max();
 
+using QueryAdaptor = std::tuple<std::int64_t, std::int64_t, std::int64_t>; // Tuple<Node, lo, hi>
+
 // Propagate updates lazily down the tree
 inline void push_down(std::int64_t node, 
                       std::int64_t a, 
@@ -53,14 +55,12 @@ inline void push_down(std::int64_t node,
 {
     if(lazy[node] != 0)
     {
-        tree[node] += lazy[node];
+        tree[node] += lazy[node] * (b - a + 1);
         
         if(a != b)
         {
-            std::int64_t mid = (a + b) / 2;
-            
-            lazy[2*node]   += (lazy[node]/(b-a+1)) * (mid-a+1);
-            lazy[2*node+1] += (lazy[node]/(b-a+1)) *   (b-mid);
+            lazy[2*node]   += lazy[node];
+            lazy[2*node+1] += lazy[node];
         }
         
         lazy[node] = 0;
@@ -74,9 +74,7 @@ void update_tree(std::int64_t node,
                  std::int64_t i, 
                  std::int64_t j, 
                  std::int64_t val)
-{   
-    using QueryAdaptor = std::tuple<std::int64_t, std::int64_t, std::int64_t>; // Tuple<Node, lo, hi>
-    
+{
     std::stack<QueryAdaptor> st;
     
     st.emplace(node, a, b);
@@ -90,14 +88,11 @@ void update_tree(std::int64_t node,
         if (curra == currb && curra == INF) // Node merge flagged
         {
             tree[currnode] = tree[currnode*2] + tree[currnode*2+1];
-            continue;
         }
         else
         {
             push_down(currnode, curra, currb);
-        
-            std::int64_t mid = (curra + currb) / 2;
-        
+
             if(curra > currb || curra > j || currb < i) // No overlap
                 continue;
             else if(curra >= i && currb <= j) // Total Overlap
@@ -107,8 +102,8 @@ void update_tree(std::int64_t node,
         
                 if(curra != currb)
                 {
-                    lazy[currnode*2]   += val * (mid - curra + 1);
-                    lazy[currnode*2+1] += val * (currb - mid);
+                    lazy[currnode*2]   += val;
+                    lazy[currnode*2+1] += val;
                 }
             }
             else // Partial Overlap
@@ -117,7 +112,9 @@ void update_tree(std::int64_t node,
                 st.emplace(currnode, INF, INF); 
             
                 // Push children
-                st.emplace(currnode*2, curra, mid);
+                std::int64_t mid = (curra + currb) / 2;
+                
+                st.emplace(currnode*2,   curra,   mid);
                 st.emplace(currnode*2+1, mid+1, currb);
             }
         }
@@ -130,9 +127,7 @@ std::int64_t query(std::int64_t node,
                    std::int64_t b, 
                    std::int64_t i, 
                    std::int64_t j)
-{    
-    using QueryAdaptor = std::tuple<std::int64_t, std::int64_t, std::int64_t>; // Tuple<Node, lo, hi>
-    
+{
     std::stack<QueryAdaptor> st; // For Iterative Preorder Traversal using stack
     
     st.emplace(node, a, b);
@@ -154,7 +149,7 @@ std::int64_t query(std::int64_t node,
         {
             std::int64_t mid = (curra + currb) / 2;
             
-            st.emplace(currnode * 2, curra, mid);
+            st.emplace(currnode * 2,     curra,   mid);
             st.emplace(currnode * 2 + 1, mid+1, currb);
         }
     }
@@ -169,11 +164,11 @@ int main()
     
     while (tests--)
     {
-        std::memset(tree, 0, sizeof(std::int64_t) * 4000001);
-        std::memset(lazy, 0, sizeof(std::int64_t) * 4000001);
-        
         long long n, c;
         std::scanf("%lld%lld", &n, &c);
+        
+        std::memset(tree, 0, sizeof(std::int64_t) * 4000001);
+        std::memset(lazy, 0, sizeof(std::int64_t) * 4000001);
         
         while (c--)
         {
