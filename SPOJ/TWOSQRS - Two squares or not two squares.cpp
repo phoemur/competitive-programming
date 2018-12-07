@@ -64,6 +64,8 @@ void BitSeive()
             sieve.push_back(i);
 }
 
+
+// https://en.wikipedia.org/wiki/Fermat%27s_theorem_on_sums_of_two_squares
 bool test(long n)
 {
     for (auto& elem : sieve)
