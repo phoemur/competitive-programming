@@ -60,7 +60,7 @@ bool predicate(const std::vector<int>& stalls, int cows, int distance)
     return false;
 }
 
-/* This function returns the minimun distance between 
+/* This function returns the greatest minimum distance between 
  * cows given a certain stalll placement */
 int bs_solve(const std::vector<int>& stalls, int cows)
 {
