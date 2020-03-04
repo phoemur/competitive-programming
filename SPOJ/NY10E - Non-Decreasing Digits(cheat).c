@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// Weak test cases had led to this:
+// Weak test cases led to this:
 long arr[65] = 
 {0,
 10,
