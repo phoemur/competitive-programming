@@ -75,7 +75,7 @@ int target_set[N]; // map node to a set representing the chain
 
 // Custom comparator for the sets below
 struct compare {
-    bool operator()(int lhs, int rhs)
+    bool operator()(int lhs, int rhs) const
     {   // In the same chain, nodes with less height comes first
         return height[lhs] < height[rhs];
     }
