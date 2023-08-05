@@ -61,7 +61,6 @@ int main(int argc, char** argv)
             }
         }
 
-
         printf("Case %d: %d\n", i, best);
     }
 
